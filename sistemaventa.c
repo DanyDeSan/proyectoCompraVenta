@@ -481,6 +481,7 @@ Producto* Push(Producto *inicio, int v)
    pNodo->sig = inicio;
    /* Ahora, el comienzo de nuestra pila es en nuevo nodo */
    inicio = pNodo;
+   return pNodo;
 }
 
 int Pop(Producto *inicio)
