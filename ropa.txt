@@ -1,0 +1,3 @@
+camisa 499.99 6
+pantalon 899.99 7
+zapatos 399.99 5
