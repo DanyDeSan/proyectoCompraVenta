@@ -42,12 +42,12 @@ int main(int argc, char const *argv[])
 	do{
 		
 		printf("\nOpciones de la Tienda: \n\n");
-		printf("1. Departamento de electronica. \n");
-		printf("2. Departamento comida. \n");
-		printf("3. Departamento ropa. \n");
-		printf("4. Departamento muebles. \n");
-		printf("5. Departamento deportes. \n");
-		printf("6. Salir del programa\n\n");
+		printf("1. Departamento de electronica: \n");
+		printf("2. Departamento papeleria: \n");
+		printf("3. Departamento ropa: \n");
+		printf("4. Departamento muebles: \n");
+		printf("5. Departamento deportes: \n");
+		printf("6. Salir del programa: \n\n");
 
 		printf("Aque departamento decia ir: ");
 		scanf("%d",&opcion);
@@ -63,13 +63,13 @@ int main(int argc, char const *argv[])
 
 					do{
 
-					printf("\nIngrese una opcion: \n\n");
+					printf("\n\nIngrese una opcion: \n\n");
 					printf("1. Desea mostrar la lista de productos: \n");
 					printf("2. Desea eliminar algun producto: \n");
 					printf("3. Desea modificar algun producto: \n");
 					printf("4. Desea importar productos de un archivo de texto: \n");
 					printf("5. Desea exportar productos a un archivo de  texto: \n");
-					printf("6. Desea Regresar: \n\n");
+					printf("6. Salir del programa: \n\n");
 
 					opcion=0;
 					printf("Su opcion es: ");
@@ -78,7 +78,6 @@ int main(int argc, char const *argv[])
 					switch(opcion)
 						{
 						case 1:
-								
 								imprimirProductos(lista,num);
 								break;
 
@@ -105,7 +104,7 @@ int main(int argc, char const *argv[])
 					     		break;
 
 					    case 6:
-					     		printf("\n Menu anterior: \n");
+					     		printf("\n Fin del programa... \n");
 					            break;
 
 						default:
@@ -115,11 +114,11 @@ int main(int argc, char const *argv[])
 
 						}
 
-					}while(opcion!=4);				
+					}while(opcion!=6);				
 										
 			        break;
       		case 2:
-      				printf("Ingrese el numero de productos\n");
+      				printf("\nIngrese el numero de productos\n");
 					scanf("%d",&num);
 					lista=crearProducto(num);
 					lista=ingresarProducto(lista,num);				
@@ -128,13 +127,13 @@ int main(int argc, char const *argv[])
 
 					do{
 
-					printf("\nIngrese una opcion: \n\n");
+					printf("\n\nIngrese una opcion: \n\n");
 					printf("1. Desea mostrar la lista de productos: \n");
 					printf("2. Desea eliminar algun producto: \n");
 					printf("3. Desea modificar algun producto: \n");
 					printf("4. Desea importar productos de un archivo de texto: \n");
 					printf("5. Desea exportar productos a un archivo de  texto: \n");
-					printf("6. Desea Regresar: \n\n");
+					printf("6. Salir del programa: \n\n");
 
 					opcion=0;
 					printf("Su opcion es: ");
@@ -143,7 +142,6 @@ int main(int argc, char const *argv[])
 					switch(opcion)
 						{
 						case 1:
-								grabar_archivo(archivo,lista,num);
 								imprimirProductos(lista,num);
 								break;
 
@@ -151,7 +149,6 @@ int main(int argc, char const *argv[])
 								printf("\nIngrese el indice del producto a eliminar: \n");
 								scanf("%d",&indice);
 								lista=eliminarProducto(lista,indice);
-								imprimirProductos(lista,num);
 								break;
 
 						case 3: 
@@ -170,7 +167,7 @@ int main(int argc, char const *argv[])
 					     		break;
 
 					    case 6:
-					     		printf("\n Menu anterior: \n");
+					     		printf("\n Fin del programa... \n");
 					            break;
 
 						default:
@@ -180,11 +177,11 @@ int main(int argc, char const *argv[])
 
 						}
 
-					}while(opcion!=4);				
+					}while(opcion!=6);				
 										
 			        break;					
       		case 3:
-            		printf("Ingrese el numero de productos\n");
+            		printf("\n\nIngrese el numero de productos\n");
 					scanf("%d",&num);
 					lista=crearProducto(num);
 					lista=ingresarProducto(lista,num);				
@@ -199,7 +196,7 @@ int main(int argc, char const *argv[])
 					printf("3. Desea modificar algun producto: \n");
 					printf("4. Desea importar productos de un archivo de texto: \n");
 					printf("5. Desea exportar productos a un archivo de  texto: \n");
-					printf("6. Desea Regresar: \n\n");
+					printf("6. Salir del programa: \n\n");
 
 					opcion=0;
 					printf("Su opcion es: ");
@@ -208,7 +205,6 @@ int main(int argc, char const *argv[])
 					switch(opcion)
 						{
 						case 1:
-								grabar_archivo(archivo,lista,num);
 								imprimirProductos(lista,num);
 								break;
 
@@ -216,7 +212,6 @@ int main(int argc, char const *argv[])
 								printf("\nIngrese el indice del producto a eliminar: \n");
 								scanf("%d",&indice);
 								lista=eliminarProducto(lista,indice);
-								imprimirProductos(lista,num);
 								break;
 
 						case 3: 
@@ -235,7 +230,7 @@ int main(int argc, char const *argv[])
 					     		break;
 
 					    case 6:
-					     		printf("\n Menu anterior: \n");
+					     		printf("\n Fin del programa... \n");
 					            break;
 						default:
             			printf("opcion invalida\n");
@@ -244,11 +239,11 @@ int main(int argc, char const *argv[])
 
 						}
 
-					}while(opcion!=4);				
+					}while(opcion!=6);				
 										
 			        break;
             case 4:
-            		printf("Ingrese el numero de productos\n");
+            		printf("\n\nIngrese el numero de productos\n");
 					scanf("%d",&num);
 					lista=crearProducto(num);
 					lista=ingresarProducto(lista,num);				
@@ -263,7 +258,7 @@ int main(int argc, char const *argv[])
 					printf("3. Desea modificar algun producto: \n");
 					printf("4. Desea importar productos de un archivo de texto: \n");
 					printf("5. Desea exportar productos a un archivo de  texto: \n");
-					printf("6. Desea Regresar: \n\n");
+					printf("6. Salir del programa: \n\n");
 
 					opcion=0;
 					printf("Su opcion es: ");
@@ -272,7 +267,6 @@ int main(int argc, char const *argv[])
 					switch(opcion)
 						{
 						case 1:
-								grabar_archivo(archivo,lista,num);
 								imprimirProductos(lista,num);
 								break;
 
@@ -280,7 +274,6 @@ int main(int argc, char const *argv[])
 								printf("\nIngrese el indice del producto a eliminar: \n");
 								scanf("%d",&indice);
 								lista=eliminarProducto(lista,indice);
-								imprimirProductos(lista,num);
 								break;
 
 						case 3: 
@@ -299,7 +292,7 @@ int main(int argc, char const *argv[])
 					     		break;
 
 					    case 6:
-					     		printf("\n Menu anterior: \n");
+					     		printf("\n Fin del programa... \n");
 					            break;
 						default:
             			printf("opcion invalida\n");
@@ -308,11 +301,11 @@ int main(int argc, char const *argv[])
 
 						}
 
-					}while(opcion!=4);				
+					}while(opcion!=6);				
 										
 			        break;					
 			case 5: 
-					printf("Ingrese el numero de productos\n");
+					printf("\nIngrese el numero de productos\n");
 					scanf("%d",&num);
 					lista=crearProducto(num);
 					lista=ingresarProducto(lista,num);				
@@ -321,13 +314,13 @@ int main(int argc, char const *argv[])
 
 					do{
 
-					printf("\nIngrese una opcion: \n\n");
+					printf("\n\nIngrese una opcion: \n\n");
 					printf("1. Desea mostrar la lista de productos: \n");
 					printf("2. Desea eliminar algun producto: \n");
 					printf("3. Desea modificar algun producto: \n");
 					printf("4. Desea importar productos de un archivo de texto: \n");
 					printf("5. Desea exportar productos a un archivo de  texto: \n");
-					printf("6. Desea Regresar: \n\n");
+					printf("6. Salir del programa: \n\n");
 
 					opcion=0;
 					printf("Su opcion es: ");
@@ -336,7 +329,6 @@ int main(int argc, char const *argv[])
 					switch(opcion)
 						{
 						case 1:
-								grabar_archivo(archivo,lista,num);
 								imprimirProductos(lista,num);
 								break;
 
@@ -344,7 +336,6 @@ int main(int argc, char const *argv[])
 								printf("\nIngrese el indice del producto a eliminar: \n");
 								scanf("%d",&indice);
 								lista=eliminarProducto(lista,indice);
-								imprimirProductos(lista,num);
 								break;
 
 						case 3: 
@@ -363,7 +354,7 @@ int main(int argc, char const *argv[])
 					     		break;
 
 					    case 6:
-					     		printf("\n Menu anterior: \n");
+					     		printf("\n Fin del programa... \n");
 					            break;
 						default:
             			printf("opcion invalida\n");
@@ -372,7 +363,7 @@ int main(int argc, char const *argv[])
 
 						}
 
-					}while(opcion!=4);				
+					}while(opcion!=6);				
 										
 			        break;
 			case 6: 
@@ -456,15 +447,27 @@ void leerProducto(Producto *inicio, int num)
 
 void imprimirProductos(Producto *inicio,int num){
 
-	int i=0;
-	printf("\nLos productos son: \n");
-	
-	for (i = 0; i < num; ++i)
+	Producto *produActual=inicio;
+
+	int i=0,conta=0;
+
+	if (produActual==NULL)
 	{
-		printf("\nProducto %d:\n",i+1);
-		printf("\nNombre %d: %s",i+1,(inicio+i)->nombreProducto);
-		printf("\nPrecio %d: %.2f",i+1,(inicio+i)->precio);
-		printf("\nInventario %d: %d",i+1,(inicio+i)->hay);
+		printf("\nNo ha agregado ningun producto\n");
+		exit(0);
+	}
+
+	printf("\nLos productos son: \n");
+
+	while(produActual != NULL && conta<num){
+
+			for (i = 0; i < num; ++i)
+			{
+				printf("\nNombre %d: %s, Precio %d: %.2f, Inventario %d: %d\n",i+1,(produActual+i)->nombreProducto,i+1,(produActual+i)->precio,i+1,(produActual+i)->hay);
+				conta++;
+			}
+			produActual=produActual->sig;
+			
 	}
 	printf("\n---------------\n");
 }
@@ -498,6 +501,8 @@ Producto* eliminarProducto(Producto *inicio, int indice){
 	else{
 		Producto *anterior = inicio;
 		int i = 0;
+
+
 		while(i<indice && produActual->sig != NULL){
 			anterior = produActual;
 			produActual = produActual->sig;
@@ -559,7 +564,7 @@ void cargar_archivo(FILE *archivo, Producto *inicio)
 	unsigned char nombre[30];
 	int i; 
 	
-	printf("\n\n\tIngresa el nombre del archivo a importar\n\n\t\t>> Nombre: ");
+	printf("\n\n\tIngresa el nombre del archivo a importar con extension .txt\n\n\t\t>> Nombre: ");
 	scanf(" %[^\n]",nombre);
 	archivo = fopen(nombre,"r");
 	
@@ -573,10 +578,18 @@ void cargar_archivo(FILE *archivo, Producto *inicio)
 	{
 		num = contar_renglones(archivo);
 		inicio = crearProducto(num);
-		for(i=0; i<num; i++)
+
+		printf("\nLos productos son: ");
+
+		for(i=0; i<num; i++){
 			fscanf(archivo,"%s\t%s\t%s",(inicio+i)->nombreProducto,(inicio+i)->precioProdu,(inicio+i)->hayProdu);
 
-		imprimirProductos(inicio,num);
+			printf("\n\n>> Producto %d:\n",i+1);
+			printf("\nNOMBRE %d: %s", i+1, (inicio+i)->nombreProducto);
+			printf("\nPrecio %d: %s", i+1, (inicio+i)->precioProdu);
+			printf("\nInventario %d: %s", i+1,(inicio+i)->hayProdu);
+		}
+
 		fclose(archivo);	
 	}
 }
