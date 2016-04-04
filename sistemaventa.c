@@ -17,6 +17,8 @@ typedef struct producto
 
 
 //Prototipos de funciones a utilizar:
+void desplegarMenuDepartamento(int departamento);
+Producto* introducirProductos();
 Producto* crearProducto(int num);
 Producto* ingresarProducto(Producto *inicio,int num);
 void leerProducto(Producto *inicio, int num);
@@ -500,4 +502,64 @@ pila menos el primer elemento */
    /* Borrar el nodo */
    free(pNodo);
    return v;
+}
+//Funcion que se encarga de desplegar el menu de cada departamento
+void desplegarMenuDepartamento(int departamento)
+{
+	Producto *lista=NULL;
+	int num=0,i=0, opcion=0,indice=0,obtener;
+	printf("\nIngrese el numero de productos: ");
+	scanf("%d",&num);
+	lista=crearProducto(num);
+	lista=ingresarProducto(lista,num);				
+	leerProducto(lista,num);
+	lista=Push(lista,num);
+
+	do{
+
+	printf("\nIngrese una opcion: \n\n");
+	printf("1. Ingresar nuevos productos\n");
+	printf("2. Desea mostrar la lista de productos: \n");
+	printf("3. Desea eliminar algun producto: \n");
+	printf("4. Desea modificar algun producto: \n");
+	printf("5. Desea Regresar: \n\n");
+
+
+	opcion=0;
+	printf("Su opcion es: ");
+	scanf("%d",&opcion);
+
+	switch(opcion)
+	{
+		case 1:
+		//Aqui van las funciones para ingresar nuevos productos. 
+		break;
+
+		case 2: 
+			printf("\nLos productos son: \n");
+			imprimirProductos(lista);
+		break;
+
+		case 3: 
+			printf("\nIngrese el indice del producto a eliminar: \n");
+			scanf("%d",&indice);
+			lista=eliminarProducto(lista,indice);
+			imprimirProductos(lista);
+		break;
+
+		case 4:
+			indice=0;
+			printf("\nIngrese el indice del producto a modificar: \n");
+			scanf("%d",&indice);
+			indice=obtenerProducto(lista,indice);
+		break;
+		case 5:
+			printf("\n Menu anterior: \n");
+		break; 
+		default:
+        printf("opcion invalida\n");
+        break;
+	}
+
+	}while(opcion!=4);
 }
