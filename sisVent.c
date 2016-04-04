@@ -24,8 +24,8 @@ void imprimirProductos(Producto *inicio,int num);
 Producto* liberaMemoria(Producto *inicio);
 Producto* eliminarProducto(Producto *inicio, int indice);
 int obtenerProducto(Producto *inicio, int indice);
-void grabar_archivo(FILE *archivo, Producto *inicio, int num);
-void cargar_archivo(FILE *archivo, Producto *inicio);
+void grabar_archivo(FILE *archivo, Producto *inicio, int num,int opcion);
+void cargar_archivo(FILE *archivo, Producto *inicio,int opcion);
 int contar_renglones(FILE *archivo);
 //Producto* Push(Producto *inicio, int v);
 //int Pop(Producto *inicio);
@@ -96,11 +96,11 @@ int main(int argc, char const *argv[])
 								break;
 
 						case 4:
-								cargar_archivo(archivo,lista);
+								cargar_archivo(archivo,lista,1);
 								break;
 
 					    case 5:
-					     		grabar_archivo(archivo,lista,num);
+					     		grabar_archivo(archivo,lista,num,1);
 					     		break;
 
 					    case 6:
@@ -159,11 +159,11 @@ int main(int argc, char const *argv[])
 								break;
 
 						case 4:
-								cargar_archivo(archivo,lista);
+								cargar_archivo(archivo,lista,2);
 								break;
 
 					    case 5:
-					     		grabar_archivo(archivo,lista,num);
+					     		grabar_archivo(archivo,lista,num,2);
 					     		break;
 
 					    case 6:
@@ -222,11 +222,11 @@ int main(int argc, char const *argv[])
 								break;
 
 						case 4:
-								cargar_archivo(archivo,lista);
+								cargar_archivo(archivo,lista,3);
 								break;
 
 					    case 5:
-					     		grabar_archivo(archivo,lista,num);
+					     		grabar_archivo(archivo,lista,num,3);
 					     		break;
 
 					    case 6:
@@ -284,11 +284,11 @@ int main(int argc, char const *argv[])
 								break;
 
 						case 4:
-								cargar_archivo(archivo,lista);
+								cargar_archivo(archivo,lista,4);
 								break;
 
 					    case 5:
-					     		grabar_archivo(archivo,lista,num);
+					     		grabar_archivo(archivo,lista,num,4);
 					     		break;
 
 					    case 6:
@@ -346,11 +346,11 @@ int main(int argc, char const *argv[])
 								break;
 
 						case 4:
-								cargar_archivo(archivo,lista);
+								cargar_archivo(archivo,lista,5);
 								break;
 
 					    case 5:
-					     		grabar_archivo(archivo,lista,num);
+					     		grabar_archivo(archivo,lista,num,5);
 					     		break;
 
 					    case 6:
@@ -530,68 +530,89 @@ int obtenerProducto(Producto *inicio, int indice){
 	return produActual->valor;
 }
 
-void grabar_archivo(FILE *archivo, Producto *inicio, int num)
+void grabar_archivo(FILE *archivo, Producto *inicio, int num, int opcion)
 {
 	int i;
 	unsigned char nombre[25]= {'\0'};
 	
+	switch(opcion)
+	{
+		case 1:
+			archivo = fopen("electronica.txt", "w+");
+		break;
+		case 2:
+			archivo = fopen("papeleria.txt", "w+");
+		break; 
+		case 3:
+			archivo = fopen("ropa.txt", "w+");
+		break; 
+		case 4:
+			archivo = fopen("muebles.txt", "w+");
+		break;
+		case 5:
+			archivo = fopen("deportes.txt", "w+");
+		break; 
+		default:
+			printf("Easter Egg (*.*) \n");
+		break;
+	}	
+
+	/*
 	printf("\n\tEscribe el nombre del archivo en el cual deseas guardar\n\tlos productos con su extensión: \n\n\t\t>> Nombre: ");
 	scanf(" %[^\n]",nombre);
 	archivo = fopen(nombre,"w");
-	
-	if(archivo == NULL)
-	{
-		printf("\n\n\tError al abrir o crear el archivo");
-		fflush(stdin);
-		exit(0);
-	}
-	else
-	{	
-			fprintf(archivo,"\nProductos del departamento:\n\nNombre\t\tPrecio\t\tInventario\n\n");
+	*/
 
 		for(i=0; i<num; i++)
 		{
-			fprintf(archivo,"%s\t\t%.2f\t%.2d\n",(inicio+i)->nombreProducto,(inicio+i)->precio,(inicio+i)->hay);
+			fprintf(archivo,"%s\t%.2f\t%.2d\n",(inicio+i)->nombreProducto,(inicio+i)->precio,(inicio+i)->hay);
 		}
 		fclose(archivo);
-	}
+	
 }
 
 
-void cargar_archivo(FILE *archivo, Producto *inicio)
+void cargar_archivo(FILE *archivo, Producto *inicio, int opcion)
 {
 	int num;
 	unsigned char nombre[30];
 	int i; 
-	
-	printf("\n\n\tIngresa el nombre del archivo a importar con extension .txt\n\n\t\t>> Nombre: ");
-	scanf(" %[^\n]",nombre);
-	archivo = fopen(nombre,"r");
-	
-	if(archivo == NULL)
+	switch(opcion)
 	{
-		printf("\n\t>>  No se pudo abrir el archivo o no existe  <<\n\t  Intente ejecutar el programa de nuevo.\n\n");
-		fflush(stdin);
-		exit(0);
+		case 1:
+			archivo = fopen("electronica.txt", "r");
+		break;
+		case 2:
+			archivo = fopen("papeleria.txt", "r");
+		break; 
+		case 3:
+			archivo = fopen("ropa.txt", "r");
+		break; 
+		case 4:
+			archivo = fopen("muebles.txt", "r");
+		break;
+		case 5:
+			archivo = fopen("deportes.txt", "r");
+		break; 
+		default:
+			printf("Easter Egg (*.*) \n");
+		break;
 	}
-	else
-	{
-		num = contar_renglones(archivo);
-		inicio = crearProducto(num);
+	
+	num = contar_renglones(archivo);
+	inicio = crearProducto(num);
 
-		printf("\nLos productos son: ");
+	printf("\nLos productos son: ");
 
-		for(i=0; i<num; i++){
-			fscanf(archivo,"%s\t%s\t%s",(inicio+i)->nombreProducto,(inicio+i)->precioProdu,(inicio+i)->hayProdu);
-
-			printf("\n\n>> Producto %d:\n",i+1);
-			printf("\nNOMBRE %d: %s", i+1, (inicio+i)->nombreProducto);
-			printf("\nPrecio %d: %s", i+1, (inicio+i)->precioProdu);
-			printf("\nInventario %d: %s", i+1,(inicio+i)->hayProdu);
-		}
-
-		fclose(archivo);	
+	for(i=0; i<num; i++){
+		fscanf(archivo,"%s\t%s\t%s",(inicio+i)->nombreProducto,(inicio+i)->precioProdu,(inicio+i)->hayProdu);
+		printf("\n\n>> Producto %d:\n",i+1);
+		printf("\nNOMBRE %d: %s", i+1, (inicio+i)->nombreProducto);
+		printf("\nPrecio %d: %s", i+1, (inicio+i)->precioProdu);
+		printf("\nInventario %d: %s", i+1,(inicio+i)->hayProdu);
 	}
+
+	fclose(archivo);	
 }
 
 
