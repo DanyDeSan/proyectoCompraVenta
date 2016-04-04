@@ -1,3 +1,0 @@
-cuaderno 12.5 23
-tijeras 6.8 6
-sacapuntas 5 10
