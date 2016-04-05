@@ -17,18 +17,16 @@ typedef struct producto
 }Producto;
 
 //Prototipos de funciones a utilizar:
-Producto* crearProducto(int num);
-Producto* ingresarProducto(Producto *inicio,int num);
-void leerProducto(Producto *inicio, int num);
-void imprimirProductos(Producto *inicio,int num);
-Producto* liberaMemoria(Producto *inicio);
-Producto* eliminarProducto(Producto *inicio, int indice);
-int obtenerProducto(Producto *inicio, int indice);
-void grabar_archivo(FILE *archivo, Producto *inicio, int num);
-void cargar_archivo(FILE *archivo, Producto *inicio);
-int contar_renglones(FILE *archivo);
-//Producto* Push(Producto *inicio, int v);
-//int Pop(Producto *inicio);
+Producto* crearProducto(int num);//esta funcion recibe el numero de productos a crear y devuleve un apuntador a estructura 
+Producto* ingresarProducto(Producto *inicio,int num);//posteriormente de crear porductos esta funcion ingresa prodcutos a una lista y devule un apuntador a estructura
+void leerProducto(Producto *inicio, int num);//esta funcion no devuleve nada, solamente lee los datos ingresados por el usuario: nombre producto, precio, inventario
+void imprimirProductos(Producto *inicio,int num);//imprime la lista de productos ingresada por el usuario 
+Producto* liberaMemoria(Producto *inicio);//una vez terminado el programa libera la memoria usada para crear productos y devuelve un apuntador a estructura
+Producto* eliminarProducto(Producto *inicio, int indice);//esta funcion se encarga de eliminar algun producto que el usuario haya ingresado, pero ya no necesite, devuelve un apuntador a estructura
+int obtenerProducto(Producto *inicio, int indice);//funcion que obtiene algun producto que el usuario necesite modificar y devuelve un entero  
+void grabar_archivo(FILE *archivo, Producto *inicio, int num);//funcion que sirve para escribir los datos ingresados por el usuario a un archivo con extencion .txt
+void cargar_archivo(FILE *archivo, Producto *inicio);//funcion que importa productos para un determiando departamento desde un archivo con extension .txt
+int contar_renglones(FILE *archivo);//est funcion cuenta caracter por caracter para pasarselos a la funcion cargar archivo y asi poder importar los productos correctamente al devolver un entero
 
 int main(int argc, char const *argv[])
 {
@@ -58,8 +56,9 @@ int main(int argc, char const *argv[])
             		printf("\nIngrese el numero de productos: ");
 					scanf("%d",&num);
 					lista=crearProducto(num);
-					lista=ingresarProducto(lista,num);				
 					leerProducto(lista,num);
+					lista=ingresarProducto(lista,num);				
+					
 
 					do{
 
@@ -85,7 +84,6 @@ int main(int argc, char const *argv[])
 								printf("\nIngrese el indice del producto a eliminar: \n");
 								scanf("%d",&indice);
 								lista=eliminarProducto(lista,indice);
-								imprimirProductos(lista,num);
 								break;
 
 						case 3: 
@@ -402,28 +400,35 @@ Producto* crearProducto(int num)
 
 Producto* ingresarProducto(Producto *inicio,int num){
 	Producto *produActual= inicio;
+	Producto *produNuevo=NULL;
 	
-	int i=0;
-
-	for (i = 0; i < num; ++i)
-	{
+	int i=0,conta=0;
 		
 	if (inicio== NULL)
 	{
-		produActual=malloc(sizeof(Producto));
-		//produActual->valor=dato;
-		produActual->sig=NULL;
+		produActual= crearProducto(num);
+		produActual->sig = NULL;
 		inicio=produActual;
+
 	}else{
-		while(produActual->sig != NULL){
+
+
+		while(produActual->sig != NULL && conta<num){
+
+			for (i = 0; i < num; ++i)
+			{
+				conta++;
+			}	
+
 			produActual=produActual->sig;
 		}
-		Producto *produNuevo= malloc(sizeof(Producto));
-		//produNuevo->valor=dato;
+
+		
+		produNuevo= crearProducto(num);
 		produNuevo->sig=NULL;
 		produActual->sig=produNuevo;
 	     }
-    }
+    
 	return inicio;
 }
 
