@@ -7,7 +7,7 @@ typedef struct producto
 	int valor;
 	unsigned char nombreProducto[30];
 	unsigned char precioProdu[30];
-	const char hayProdu[30];
+	char hayProdu[30];
 	float precio;
 	unsigned int hay;
 	struct producto *sig;
@@ -337,7 +337,7 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 
 	//En esta parte se actualizan las existencias
 
-	
+
 	int existencias = (int)strtol(lista[index].hayProdu,NULL,10);
 	char * existenciaRegistrada = lista[index].hayProdu;
 	int ceroExistencias = 0;
