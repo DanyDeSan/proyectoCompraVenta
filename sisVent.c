@@ -17,16 +17,16 @@ typedef struct producto
 }Producto;
 
 //Prototipos de funciones a utilizar:
-Producto* crearProducto(int num);
-Producto* ingresarProducto(Producto *inicio,int num);
-void leerProducto(Producto *inicio, int num);
-void imprimirProductos(Producto *inicio,int num);
-Producto* liberaMemoria(Producto *inicio);
-Producto* eliminarProducto(Producto *inicio, int indice);
-int obtenerProducto(Producto *inicio, int indice);
-void grabar_archivo(FILE *archivo, Producto *inicio, int num,int opcion);
-void cargar_archivo(FILE *archivo, Producto *inicio,int opcion);
-int contar_renglones(FILE *archivo);
+Producto* crearProducto(int num);//esta funcion recibe el numero de productos a crear y devuleve un apuntador a estructura 
+Producto* ingresarProducto(Producto *inicio,int num);//posteriormente de crear porductos esta funcion ingresa prodcutos a una lista y devule un apuntador a estructura
+void leerProducto(Producto *inicio, int num);//esta funcion no devuleve nada, solamente lee los datos ingresados por el usuario: nombre producto, precio, inventario
+void imprimirProductos(Producto *inicio,int num);//imprime la lista de productos ingresada por el usuario 
+Producto* liberaMemoria(Producto *inicio);//una vez terminado el programa libera la memoria usada para crear productos y devuelve un apuntador a estructura
+Producto* eliminarProducto(Producto *inicio, int indice);//esta funcion se encarga de eliminar algun producto que el usuario haya ingresado, pero ya no necesite, devuelve un apuntador a estructura
+int obtenerProducto(Producto *inicio, int indice);//funcion que obtiene algun producto que el usuario necesite modificar y devuelve un entero  
+void grabar_archivo(FILE *archivo, Producto *inicio, int num,int opcion);//funcion que sirve para escribir los datos ingresados por el usuario a un archivo con extencion .txt
+void cargar_archivo(FILE *archivo, Producto *inicio,int opcion);//funcion que importa productos para un determiando departamento desde un archivo con extension .txt
+int contar_renglones(FILE *archivo);//est funcion cuenta caracter por caracter para pasarselos a la funcion cargar archivo y asi poder importar los productos correctamente al devolver un entero
 //Producto* Push(Producto *inicio, int v);
 //int Pop(Producto *inicio);
 
