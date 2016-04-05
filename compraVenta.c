@@ -7,7 +7,7 @@ typedef struct producto
 	int valor;
 	unsigned char nombreProducto[30];
 	unsigned char precioProdu[30];
-	unsigned char hayProdu[30];
+	char hayProdu[30];
 	float precio;
 	unsigned int hay;
 	struct producto *sig;
@@ -19,8 +19,9 @@ void desplegarListaProductos(FILE *registro,int *departamento);
 int contarTipoProducto(FILE *registro);
 Producto* crearListaProductos(FILE *registro, int numeroProductos);
 Producto* asignarInformacionProductos(Producto* lista, FILE* registro, int numeroProductos);
-void comprar(Producto productoSeleccionado,int index,FILE* registro,int *departamento);
+void comprar(Producto* lista,int index,FILE* registro,int *departamento, int numeroProductos);
 void lanzadorError(FILE* apuntador);
+void fflushin();
 
 int main(int argc, char const *argv[])
 {
@@ -45,7 +46,7 @@ int main(int argc, char const *argv[])
 				departamento = 1;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -57,7 +58,7 @@ int main(int argc, char const *argv[])
 				departamento = 2;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -70,7 +71,7 @@ int main(int argc, char const *argv[])
 				departamento = 3;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -83,7 +84,7 @@ int main(int argc, char const *argv[])
 				departamento = 4;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -96,7 +97,7 @@ int main(int argc, char const *argv[])
 				departamento = 5; 
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -117,6 +118,7 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	fclose(registro);
+	fflushin();
 	}while(Opcion != 6);
 	return 0;
 }
@@ -164,34 +166,51 @@ void desplegarListaProductos(FILE *registro,int * departamento)
 	do{
 		//Primero contamos el números de productos, por tipo de producto, no por existencias.
 		int numeroProductos = contarTipoProducto(registro);
-		Producto *lista = crearListaProductos(registro,numeroProductos);
-		lista = asignarInformacionProductos(lista,registro,numeroProductos);
-		for(int i = 0; i < numeroProductos; i++)
+		if(numeroProductos > 0)
 		{
-			printf("%d- %s Precio: $%s\n",i+1,lista[i].nombreProducto,lista[i].precioProdu);
-		}
-		printf("Opciones:\n");
-		printf("1.- Desea comprar algo?\n");
-		printf("2.- Salir del departamento\n");
-		scanf("%d",&opciones);
-		switch(opciones)
-		{
-			case 1:
-				printf("Seleccione el producto que desea comprar\n");
-				scanf("%d",&producto);
-				producto --;
-				//
-				printf("%d\n",producto);
-				printf("%s\t%s\n",lista[producto].nombreProducto,lista[producto].precioProdu);
-				//
-				comprar(lista[producto],producto,registro,departamento);
-			break;
-			case 2:
+			Producto *lista = crearListaProductos(registro,numeroProductos);
+			lista = asignarInformacionProductos(lista,registro,numeroProductos);
+			for(int i = 0; i < numeroProductos; i++)
+			{
+				printf("%d- %s Precio: $%s\n",i+1,lista[i].nombreProducto,lista[i].precioProdu);
+			}
+			printf("Opciones:\n");
+			printf("1.- Desea comprar algo?\n");
+			printf("2.- Salir del departamento\n");
+			fflush(stdout);
+			scanf("%d",&opciones);
+			switch(opciones)
+			{
+				case 1:
+					printf("Seleccione el producto que desea comprar\n");
+					scanf("%d",&producto);
+					producto --;
+					//
+					printf("numeroProductos: %d\n", numeroProductos);
+					//
+					//Aquí nos aseguramos de que la opcion esogida esté dentro del rango
+					//Para evitar un desbordamiento.
+					if(producto < numeroProductos && producto >= 0)
+					{
+						comprar(lista,producto,registro,departamento,numeroProductos);
+					}else
+					{
+						printf("Por favor escoja una opcion correcta\n");
+					}
+				break;
+				case 2:
 
-			break;
-			default:
-			printf("Por favor seleccione una opcion valida\n");
-			break;
+				break;
+				default:
+				printf("Por favor seleccione una opcion valida\n");
+				break;
+			}
+			rewind(registro);
+			//fflushin();
+		}else
+		{
+			printf("Lo sentimos ya no hay productos displonibles en este departamento\n");
+			opciones = 2;
 		}
 	}while(opciones != 2);
 
@@ -274,7 +293,7 @@ Description:
 	departamental y general, aparte de actualizar las existencias.
 */
 
-void comprar(Producto productoSeleccionado, int index, FILE *registro, int* departamento)
+void comprar(Producto* lista, int index, FILE *registro, int* departamento, int numeroProductos)
 {
 	FILE *registroDepartamental;
 	FILE *registroGeneral;
@@ -286,37 +305,139 @@ void comprar(Producto productoSeleccionado, int index, FILE *registro, int* depa
 		case 1:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesElectronica.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Electronica\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Electronica\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 2:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesPapeleria.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Papelería\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Papelería\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 3:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesRopa.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Ropa\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Ropa\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 4:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesMuebles.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Muebles\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Muebles\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 5:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesDeportes.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Deportes\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Deportes\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		default:
 			printf("Easter Egg\n");
 		break;
 	}
 	printf("Registrando la compra...\n");
-	fprintf(registroDepartamental, "Fecha: Hora: %s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+	fprintf(registroDepartamental, "Fecha: Hora: %s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 	printf("listo!\n");
+
+	//En esta parte se actualizan las existencias
+
+
+	int existencias = (int)strtol(lista[index].hayProdu,NULL,10);
+	char * existenciaRegistrada = lista[index].hayProdu;
+	int ceroExistencias = 0;
+
+	printf("%d\n",existencias);	
+
+	existencias --;
+
+	if(existencias == 0)
+	{
+		ceroExistencias = 1;
+	}
+	snprintf(lista[index].hayProdu,10,"%d",existencias);
+	printf("%s\n", lista[index].hayProdu);
+
+	fclose(registro);
+	//cerramos el archivo para reabrirlo en forma de escritura y sobreescribir el archivo
+
+	switch(departamentoSeleccionado)
+	{
+		case 1:
+			registro = fopen("electronica.txt","w+");
+		break;
+		case 2:
+			registro = fopen("papeleria.txt","w+");
+		break;
+		case 3:
+			registro = fopen("ropa.txt","w+");
+		break;
+		case 4:
+			registro = fopen("muebles.txt","w+");
+		break;
+		case 5:
+			registro = fopen("deportes.txt","w+");
+		break;
+		default:
+			printf("Otro Easter Egg\n");
+		break;
+	}
+	if(registro == NULL)
+	{
+		printf("Sentimos las molestias, el sistema esta experimentando fallos\n");
+		exit(0);
+	}
+
+
+	if(ceroExistencias == 1)
+	{
+		for(int i = 0; i<numeroProductos; i++)
+		{
+			if(i == index)
+			{
+				//Se salta esta línea
+			}
+			else
+			{
+				fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+			}
+		}
+
+	}else
+	{
+		for(int i = 0; i<numeroProductos; i++)
+		{
+			fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+		}
+	}
+
+	fclose(registro);
+
+
+		switch(departamentoSeleccionado)
+	{
+		case 1:
+			registro = fopen("electronica.txt","r");
+		break;
+		case 2:
+			registro = fopen("papeleria.txt","r");
+		break;
+		case 3:
+			registro = fopen("ropa.txt","r");
+		break;
+		case 4:
+			registro = fopen("muebles.txt","r");
+		break;
+		case 5:
+			registro = fopen("deportes.txt","r");
+		break;
+		default:
+			printf("Otro Easter Egg\n");
+		break;
+	}
 	fclose(registroDepartamental);
 	fclose(registroDepartamental);
 }
-
+void fflushin()
+{
+int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+}
 
