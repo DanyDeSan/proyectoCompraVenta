@@ -565,7 +565,7 @@ void grabar_archivo(FILE *archivo, Producto *inicio, int num, int opcion)
 
 		for(i=0; i<num; i++)
 		{
-			fprintf(archivo,"%s\t%.2f\t%.2d\n",(inicio+i)->nombreProducto,(inicio+i)->precio,(inicio+i)->hay);
+			fprintf(archivo,"%s %.2f %.2d\n",(inicio+i)->nombreProducto,(inicio+i)->precio,(inicio+i)->hay);
 		}
 		fclose(archivo);
 	

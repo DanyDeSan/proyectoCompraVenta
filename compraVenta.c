@@ -21,6 +21,7 @@ Producto* crearListaProductos(FILE *registro, int numeroProductos);
 Producto* asignarInformacionProductos(Producto* lista, FILE* registro, int numeroProductos);
 void comprar(Producto* lista,int index,FILE* registro,int *departamento, int numeroProductos);
 void lanzadorError(FILE* apuntador);
+void fflushin();
 
 int main(int argc, char const *argv[])
 {
@@ -45,7 +46,7 @@ int main(int argc, char const *argv[])
 				departamento = 1;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -57,7 +58,7 @@ int main(int argc, char const *argv[])
 				departamento = 2;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -70,7 +71,7 @@ int main(int argc, char const *argv[])
 				departamento = 3;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -83,7 +84,7 @@ int main(int argc, char const *argv[])
 				departamento = 4;
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -96,7 +97,7 @@ int main(int argc, char const *argv[])
 				departamento = 5; 
 				if( registro == NULL)
 				{
-					printf("Lo sentimos el sistema no está disponible\n Contacte al administrador\n");
+					printf("Sentimos las molestias este departamento no esta displonible\n");
 					continue;
 				}else{
 					desplegarListaProductos(registro,&departamento);
@@ -117,6 +118,7 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	fclose(registro);
+	fflushin();
 	}while(Opcion != 6);
 	return 0;
 }
@@ -164,34 +166,51 @@ void desplegarListaProductos(FILE *registro,int * departamento)
 	do{
 		//Primero contamos el números de productos, por tipo de producto, no por existencias.
 		int numeroProductos = contarTipoProducto(registro);
-		Producto *lista = crearListaProductos(registro,numeroProductos);
-		lista = asignarInformacionProductos(lista,registro,numeroProductos);
-		for(int i = 0; i < numeroProductos; i++)
+		if(numeroProductos > 0)
 		{
-			printf("%d- %s Precio: $%s\n",i+1,lista[i].nombreProducto,lista[i].precioProdu);
-		}
-		printf("Opciones:\n");
-		printf("1.- Desea comprar algo?\n");
-		printf("2.- Salir del departamento\n");
-		scanf("%d",&opciones);
-		switch(opciones)
-		{
-			case 1:
-				printf("Seleccione el producto que desea comprar\n");
-				scanf("%d",&producto);
-				producto --;
-				//
-				printf("%d\n",producto);
-				printf("%s\t%s\n",lista[producto].nombreProducto,lista[producto].precioProdu);
-				//
-				comprar(lista,producto,registro,departamento,numeroProductos);
-			break;
-			case 2:
+			Producto *lista = crearListaProductos(registro,numeroProductos);
+			lista = asignarInformacionProductos(lista,registro,numeroProductos);
+			for(int i = 0; i < numeroProductos; i++)
+			{
+				printf("%d- %s Precio: $%s\n",i+1,lista[i].nombreProducto,lista[i].precioProdu);
+			}
+			printf("Opciones:\n");
+			printf("1.- Desea comprar algo?\n");
+			printf("2.- Salir del departamento\n");
+			fflush(stdout);
+			scanf("%d",&opciones);
+			switch(opciones)
+			{
+				case 1:
+					printf("Seleccione el producto que desea comprar\n");
+					scanf("%d",&producto);
+					producto --;
+					//
+					printf("numeroProductos: %d\n", numeroProductos);
+					//
+					//Aquí nos aseguramos de que la opcion esogida esté dentro del rango
+					//Para evitar un desbordamiento.
+					if(producto < numeroProductos && producto >= 0)
+					{
+						comprar(lista,producto,registro,departamento,numeroProductos);
+					}else
+					{
+						printf("Por favor escoja una opcion correcta\n");
+					}
+				break;
+				case 2:
 
-			break;
-			default:
-			printf("Por favor seleccione una opcion valida\n");
-			break;
+				break;
+				default:
+				printf("Por favor seleccione una opcion valida\n");
+				break;
+			}
+			rewind(registro);
+			//fflushin();
+		}else
+		{
+			printf("Lo sentimos ya no hay productos displonibles en este departamento\n");
+			opciones = 2;
 		}
 	}while(opciones != 2);
 
@@ -318,16 +337,22 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 
 	//En esta parte se actualizan las existencias
 
-
+	
 	int existencias = (int)strtol(lista[index].hayProdu,NULL,10);
 	char * existenciaRegistrada = lista[index].hayProdu;
+	int ceroExistencias = 0;
 
 	printf("%d\n",existencias);	
 
 	existencias --;
 
+	if(existencias == 0)
+	{
+		ceroExistencias = 1;
+	}
 	snprintf(lista[index].hayProdu,10,"%d",existencias);
 	printf("%s\n", lista[index].hayProdu);
+
 	fclose(registro);
 	//cerramos el archivo para reabrirlo en forma de escritura y sobreescribir el archivo
 
@@ -355,13 +380,35 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 	if(registro == NULL)
 	{
 		printf("Sentimos las molestias, el sistema esta experimentando fallos\n");
+		exit(0);
 	}
 
-	for(int i = 0; i<numeroProductos; i++)
+
+	if(ceroExistencias == 1)
 	{
-		fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+		for(int i = 0; i<numeroProductos; i++)
+		{
+			if(i == index)
+			{
+				//Se salta esta línea
+			}
+			else
+			{
+				fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+			}
+		}
+
+	}else
+	{
+		for(int i = 0; i<numeroProductos; i++)
+		{
+			fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+		}
 	}
+
 	fclose(registro);
+
+
 		switch(departamentoSeleccionado)
 	{
 		case 1:
@@ -386,5 +433,11 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 	fclose(registroDepartamental);
 	fclose(registroDepartamental);
 }
-
+void fflushin()
+{
+int c;
+    do {
+        c = getchar();
+    } while (c != '\n' && c != EOF);
+}
 

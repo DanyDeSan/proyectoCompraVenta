@@ -1,3 +1,2 @@
-playera 999.99 5
-short 399.99 5
-tennis 799.99 5
+short	399.99	4
+tennis	799.99	5
