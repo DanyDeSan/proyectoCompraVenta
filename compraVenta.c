@@ -7,7 +7,7 @@ typedef struct producto
 	int valor;
 	unsigned char nombreProducto[30];
 	unsigned char precioProdu[30];
-	unsigned char hayProdu[30];
+	const char hayProdu[30];
 	float precio;
 	unsigned int hay;
 	struct producto *sig;
@@ -19,7 +19,7 @@ void desplegarListaProductos(FILE *registro,int *departamento);
 int contarTipoProducto(FILE *registro);
 Producto* crearListaProductos(FILE *registro, int numeroProductos);
 Producto* asignarInformacionProductos(Producto* lista, FILE* registro, int numeroProductos);
-void comprar(Producto productoSeleccionado,int index,FILE* registro,int *departamento);
+void comprar(Producto* lista,int index,FILE* registro,int *departamento, int numeroProductos);
 void lanzadorError(FILE* apuntador);
 
 int main(int argc, char const *argv[])
@@ -184,7 +184,7 @@ void desplegarListaProductos(FILE *registro,int * departamento)
 				printf("%d\n",producto);
 				printf("%s\t%s\n",lista[producto].nombreProducto,lista[producto].precioProdu);
 				//
-				comprar(lista[producto],producto,registro,departamento);
+				comprar(lista,producto,registro,departamento,numeroProductos);
 			break;
 			case 2:
 
@@ -274,7 +274,7 @@ Description:
 	departamental y general, aparte de actualizar las existencias.
 */
 
-void comprar(Producto productoSeleccionado, int index, FILE *registro, int* departamento)
+void comprar(Producto* lista, int index, FILE *registro, int* departamento, int numeroProductos)
 {
 	FILE *registroDepartamental;
 	FILE *registroGeneral;
@@ -286,35 +286,103 @@ void comprar(Producto productoSeleccionado, int index, FILE *registro, int* depa
 		case 1:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesElectronica.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Electronica\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Electronica\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 2:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesPapeleria.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Papelería\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Papelería\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 3:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesRopa.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Ropa\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Ropa\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 4:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesMuebles.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Muebles\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Muebles\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 5:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesDeportes.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Deportes\t%s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Deportes\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		default:
 			printf("Easter Egg\n");
 		break;
 	}
 	printf("Registrando la compra...\n");
-	fprintf(registroDepartamental, "Fecha: Hora: %s --> $%s\n",productoSeleccionado.nombreProducto,productoSeleccionado.precioProdu);
+	fprintf(registroDepartamental, "Fecha: Hora: %s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
 	printf("listo!\n");
+
+	//En esta parte se actualizan las existencias
+
+
+	int existencias = (int)strtol(lista[index].hayProdu,NULL,10);
+	char * existenciaRegistrada = lista[index].hayProdu;
+
+	printf("%d\n",existencias);	
+
+	existencias --;
+
+	snprintf(lista[index].hayProdu,10,"%d",existencias);
+	printf("%s\n", lista[index].hayProdu);
+	fclose(registro);
+	//cerramos el archivo para reabrirlo en forma de escritura y sobreescribir el archivo
+
+	switch(departamentoSeleccionado)
+	{
+		case 1:
+			registro = fopen("electronica.txt","w+");
+		break;
+		case 2:
+			registro = fopen("papeleria.txt","w+");
+		break;
+		case 3:
+			registro = fopen("ropa.txt","w+");
+		break;
+		case 4:
+			registro = fopen("muebles.txt","w+");
+		break;
+		case 5:
+			registro = fopen("deportes.txt","w+");
+		break;
+		default:
+			printf("Otro Easter Egg\n");
+		break;
+	}
+	if(registro == NULL)
+	{
+		printf("Sentimos las molestias, el sistema esta experimentando fallos\n");
+	}
+
+	for(int i = 0; i<numeroProductos; i++)
+	{
+		fprintf(registro, "%s\t%s\t%s\n",lista[i].nombreProducto,lista[i].precioProdu,lista[i].hayProdu);
+	}
+	fclose(registro);
+		switch(departamentoSeleccionado)
+	{
+		case 1:
+			registro = fopen("electronica.txt","r");
+		break;
+		case 2:
+			registro = fopen("papeleria.txt","r");
+		break;
+		case 3:
+			registro = fopen("ropa.txt","r");
+		break;
+		case 4:
+			registro = fopen("muebles.txt","r");
+		break;
+		case 5:
+			registro = fopen("deportes.txt","r");
+		break;
+		default:
+			printf("Otro Easter Egg\n");
+		break;
+	}
 	fclose(registroDepartamental);
 	fclose(registroDepartamental);
 }
