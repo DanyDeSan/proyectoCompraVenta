@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<time.h>
 
 typedef struct producto
 {
@@ -300,39 +301,45 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 	registroGeneral = fopen("operacionesGeneral.txt","a");
 	int departamentoSeleccionado = * departamento;
 	printf("Realizando la operacion...\n");
+	//Para obtener la fecha
+	time_t tiempo = time(0);
+    struct tm *tlocal = localtime(&tiempo);
+	char fecha[30];
+	strftime(fecha,30,"%d-%m-%y %H:%M:%S",tlocal);
+
 	switch(departamentoSeleccionado)
 	{
 		case 1:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesElectronica.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Electronica\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+			fprintf(registroGeneral, "%s Departamento -> Electronica\t%s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 2:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesPapeleria.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Papelería\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+			fprintf(registroGeneral, "%s Departamento -> Papelería\t%s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 3:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesRopa.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Ropa\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+			fprintf(registroGeneral, "%s Departamento -> Ropa\t%s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 4:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesMuebles.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Muebles\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+			fprintf(registroGeneral, "%s Departamento -> Muebles\t%s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		case 5:
 			printf("Registrando la compra...\n");
 			registroDepartamental = fopen("operacionesDeportes.txt","a");
-			fprintf(registroGeneral, "Fecha: Hora: Departamento -> Deportes\t%s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+			fprintf(registroGeneral, "%s Departamento -> Deportes\t%s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 		break;
 		default:
 			printf("Easter Egg\n");
 		break;
 	}
 	printf("Registrando la compra...\n");
-	fprintf(registroDepartamental, "Fecha: Hora: %s --> $%s\n",lista[index].nombreProducto,lista[index].precioProdu);
+	fprintf(registroDepartamental, "%s %s --> $%s\n",fecha,lista[index].nombreProducto,lista[index].precioProdu);
 	printf("listo!\n");
 
 	//En esta parte se actualizan las existencias
@@ -342,7 +349,6 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 	char * existenciaRegistrada = lista[index].hayProdu;
 	int ceroExistencias = 0;
 
-	printf("%d\n",existencias);	
 
 	existencias --;
 
@@ -351,7 +357,6 @@ void comprar(Producto* lista, int index, FILE *registro, int* departamento, int 
 		ceroExistencias = 1;
 	}
 	snprintf(lista[index].hayProdu,10,"%d",existencias);
-	printf("%s\n", lista[index].hayProdu);
 
 	fclose(registro);
 	//cerramos el archivo para reabrirlo en forma de escritura y sobreescribir el archivo

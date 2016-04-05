@@ -538,19 +538,19 @@ void grabar_archivo(FILE *archivo, Producto *inicio, int num, int opcion)
 	switch(opcion)
 	{
 		case 1:
-			archivo = fopen("electronica.txt", "w+");
+			archivo = fopen("electronica.txt", "a+");
 		break;
 		case 2:
-			archivo = fopen("papeleria.txt", "w+");
+			archivo = fopen("papeleria.txt", "a+");
 		break; 
 		case 3:
-			archivo = fopen("ropa.txt", "w+");
+			archivo = fopen("ropa.txt", "a+");
 		break; 
 		case 4:
-			archivo = fopen("muebles.txt", "w+");
+			archivo = fopen("muebles.txt", "a+");
 		break;
 		case 5:
-			archivo = fopen("deportes.txt", "w+");
+			archivo = fopen("deportes.txt", "a+");
 		break; 
 		default:
 			printf("Easter Egg (*.*) \n");
